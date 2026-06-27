@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Mail, Github, Linkedin } from 'lucide-react'
+import { Mail, Code2, Link } from 'lucide-react'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
@@ -7,7 +7,6 @@ export default function Contact() {
 
   function handleSend() {
     if (!form.name || !form.email || !form.message) return
-    // EmailJS integration aayega baad mein
     console.log(form)
     setSent(true)
   }
@@ -27,19 +26,29 @@ export default function Contact() {
               Open to AI engineering roles, freelance projects, and collaborations. Let's build something useful.
             </p>
             <div className="flex flex-col gap-4">
-              <a href="mailto:tashfeen247@gmail.com"
-                className="flex items-center gap-3 text-muted hover:text-white transition-colors text-sm">
+              <a
+                href="mailto:tashfeen247@gmail.com"
+                className="flex items-center gap-3 text-muted hover:text-white transition-colors text-sm"
+              >
                 <Mail size={16} className="text-amber" />
                 tashfeen247@gmail.com
               </a>
-              <a href="https://github.com/tashfeen786" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-3 text-muted hover:text-white transition-colors text-sm">
-                <Github size={16} className="text-amber" />
+              <a
+                href="https://github.com/tashfeen786"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 text-muted hover:text-white transition-colors text-sm"
+              >
+                <Code2 size={16} className="text-amber" />
                 github.com/tashfeen786
               </a>
-              <a href="https://www.linkedin.com/in/tashfeen-aziz/" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-3 text-muted hover:text-white transition-colors text-sm">
-                <Linkedin size={16} className="text-amber" />
+              <a
+                href="https://www.linkedin.com/in/tashfeen-aziz/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 text-muted hover:text-white transition-colors text-sm"
+              >
+                <Link size={16} className="text-amber" />
                 linkedin.com/in/tashfeen-aziz
               </a>
             </div>
@@ -53,13 +62,15 @@ export default function Contact() {
             ) : (
               <>
                 <input
-                  type="text" placeholder="Your name"
+                  type="text"
+                  placeholder="Your name"
                   value={form.name}
                   onChange={e => setForm({ ...form, name: e.target.value })}
                   className="bg-surface border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-muted outline-none focus:border-amber/50 transition-colors"
                 />
                 <input
-                  type="email" placeholder="your@email.com"
+                  type="email"
+                  placeholder="your@email.com"
                   value={form.email}
                   onChange={e => setForm({ ...form, email: e.target.value })}
                   className="bg-surface border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-muted outline-none focus:border-amber/50 transition-colors"

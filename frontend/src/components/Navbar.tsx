@@ -22,7 +22,7 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-8">
           {links.map(link => (
-            
+            <a
               key={link}
               href={'#' + link.toLowerCase()}
               className="text-muted hover:text-white text-sm font-medium transition-colors duration-200"

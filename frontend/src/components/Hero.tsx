@@ -148,7 +148,7 @@ export default function Hero() {
         </h1>
 
         <p className="font-grotesk text-xl text-muted font-medium tracking-tight mb-4">
-          AI Engineer · LangGraph {'&'} RAG Systems
+          AI Engineer · LangGraph & RAG Systems
         </p>
 
         <p className="text-muted text-[15.5px] leading-relaxed mb-10 max-w-lg">
@@ -162,9 +162,9 @@ export default function Hero() {
             onClick={() => document.getElementById('chat-widget')?.scrollIntoView({ behavior: 'smooth' })}
             className="bg-amber text-bg font-grotesk font-bold text-[15px] px-7 py-3.5 rounded-xl hover:bg-amber-lt transition-all duration-200 hover:-translate-y-0.5"
           >
-            🤖 Ask my AI
+            Ask my AI
           </button>
-          
+          <a
             href="#projects"
             className="border border-border text-white font-grotesk font-semibold text-[15px] px-7 py-3.5 rounded-xl hover:border-muted transition-colors duration-200"
           >
