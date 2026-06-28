@@ -9,8 +9,8 @@
 }
 
 body {
-  background-color: #0C0F1A;
-  color: #F8FAFC;
+  background-color: #080808;
+  color: #F0FDF4;
   font-family: 'Inter', sans-serif;
 }
 
@@ -19,10 +19,10 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0C0F1A;
+  background: #080808;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1E2535;
+  background: #1A1A1A;
   border-radius: 3px;
 }

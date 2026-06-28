@@ -7,14 +7,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg:       '#0C0F1A',
-        surface:  '#141824',
-        border:   '#1E2535',
-        amber:    '#F59E0B',
-        'amber-lt':'#FBBF24',
-        purple:   '#7C3AED',
-        muted:    '#94A3B8',
-        green:    '#22C55E',
+        bg:        '#080808',
+        surface:   '#111111',
+        border:    '#1A1A1A',
+        amber:     '#10B981',
+        'amber-lt':'#34D399',
+        purple:    '#6366F1',
+        muted:     '#4A4A4A',
+        green:     '#10B981',
       },
       fontFamily: {
         grotesk: ['Space Grotesk', 'sans-serif'],
