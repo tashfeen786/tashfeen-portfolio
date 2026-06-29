@@ -1,0 +1,19 @@
+NetsolChatbot is a production AI assistant built at NetsolTech internship in 2026. It is my most advanced project. It uses LangGraph for multi-node tool-calling agent architecture, Gemini 2.5 as the LLM, ChromaDB for RAG over PDF, DOCX, and TXT files, FastAPI for streaming backend with SSE, SQLite for Text-to-SQL with interactive Recharts charts, Tavily for web search, Google Calendar API for scheduling, and React for the frontend. The biggest technical challenge was resolving a gRPC and PyTorch DLL load-order crash on Windows in production. This project is private as it was built for NetsolTech.
+
+AI Voice Khata (AI_voice_khata) is a WhatsApp-native voice bookkeeping system built for Pakistan's informal economy and Kiryana stores in 2026. It uses OpenAI Whisper for Roman Urdu voice transcription, GPT-4o for extracting transaction data from voice, FastAPI for the backend, Supabase for the database, WhatsApp Business API for the interface, and React with TypeScript for a web dashboard. Users record a voice message in Roman Urdu describing a transaction and the system automatically extracts the amount, category, and description and updates their ledger. No app download required — everything works inside WhatsApp. GitHub: github.com/tashfeen786/AI_voice_khata
+
+NLP is a comprehensive 14-module RAG and NLP curriculum repository available at github.com/tashfeen786/NLP. It covers the full spectrum from basic NLP to advanced RAG systems, LangChain, LangGraph, and RAGAS evaluation. This shows my deep understanding of the entire RAG and NLP pipeline from fundamentals to production.
+
+CryptoChat (Crypto_ChatBOt_system) is a RAG-powered cryptocurrency assistant available at github.com/tashfeen786/Crypto_ChatBOt_system. It uses LangChain for the RAG pipeline, Groq with LLaMA3 as the LLM, HuggingFace for embeddings, Binance API for real-time crypto market data, FastAPI for the backend, and PostgreSQL for storage. It combines real-time crypto market data with LLM reasoning to provide personalized investment guidance.
+
+HelmetEye is an AI traffic surveillance system and my Final Year Project built in 2024-2025, available at github.com/tashfeen786/HelmetEye. It uses YOLOv12 for real-time helmet violation detection, OpenCV for video processing, OCR for number plate extraction, FastAPI for the backend, Next.js with TypeScript for the frontend, and PostgreSQL for storing violations. It detects whether motorcycle riders are wearing helmets and automatically logs their number plates.
+
+STEMETA Internship Projects are 9 real-world ML projects completed during my internship at Stameta.ai, available at github.com/tashfeen786/STEMETA_Intership_Projects. Projects include fraud detection, customer churn prediction, NLP spam classifier, healthcare ML models, FinTech predictive models, Telecom analytics, SMOTE for imbalanced data, and Flask API deployment. Built with Scikit-learn, Pandas, NumPy, NLP, and Flask.
+
+LangChain is a hands-on learning repository at github.com/tashfeen786/LangChain covering practical LangChain implementations, chains, agents, memory, and tools built while mastering the framework.
+
+100 Days of Machine Learning at github.com/tashfeen786/100DaysOfMachineLearning is a consistent 100-day journey of learning and building ML projects covering supervised learning, unsupervised learning, deep learning, and real-world applications.
+
+Patients Management System at github.com/tashfeen786/PatientsManagementSystem is a FastAPI backend with ML-powered insurance cost predictor using Scikit-learn. It demonstrates end-to-end ML integration into a production API.
+
+Loan Approval Prediction at github.com/tashfeen786/LoanApprovalPrediction is an ML classifier for predicting loan approval status built with Scikit-learn and Pandas. A real-world FinTech ML application.

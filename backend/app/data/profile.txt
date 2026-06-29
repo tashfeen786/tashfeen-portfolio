@@ -1,0 +1,17 @@
+My name is Tashfeen Aziz. I am an AI Engineer based in Lahore, Pakistan. I graduated with a BS in Information Technology from the University of Kotli, AJK in 2025. I am currently open to work and actively looking for AI engineering roles, freelance projects, and collaborations.
+
+I am open to work. My availability status is open to opportunities. Anyone interested in hiring me or collaborating can contact me at tashfeen247@gmail.com. My GitHub is github.com/tashfeen786 and my LinkedIn is linkedin.com/in/tashfeen-aziz.
+
+I specialize in LangGraph agentic systems, RAG pipelines, and Generative AI. My core stack includes LangGraph, LangChain, RAG Systems, Tool-Calling, FastAPI, ChromaDB, Groq, GPT-4o, Gemini 2.5, OpenAI Whisper, and Python.
+
+I am currently working as an AI/ML Engineer Intern at NetsolTech in Lahore from June 2026 to July 2026. At NetsolTech I built NetsolChatbot which is a multi-node LangGraph agent. I also engineered a FastAPI streaming backend and resolved a production-blocking gRPC and PyTorch DLL load-order crash on Windows. I implemented ChromaDB vector store using all-MiniLM-L6-v2 embeddings, SQL injection protection, and file upload validation.
+
+Before NetsolTech internship, I completed a 6-month AI/ML Trainee program at NetsolTech from July 2025 to December 2025. During this program I covered computer vision, deep learning, and production ML workflows. I trained and evaluated ML and DL models using Python, TensorFlow, and PyTorch on real-world datasets. I used MLflow for experiment tracking and model versioning.
+
+I also interned at Stameta.ai in Islamabad from June 2025 to July 2025 where I worked on YOLO-based object detection for real-world industry applications and model integration and deployment workflows.
+
+My technical skills include LangGraph, LangChain, RAG Systems, Tool-Calling, Agentic AI, Prompt Engineering, Google Gemini, GPT-4o, LLaMA3, Groq, HuggingFace, OpenAI Whisper, ChromaDB, Qdrant, Pinecone, Hybrid Search with BM25 and RRF, RAGAS Evaluation, Python, FastAPI, SQLite, PostgreSQL, Supabase, Docker, Git, React, TypeScript, Tailwind CSS, Recharts, YOLOv12, OpenCV, TensorFlow, PyTorch, Scikit-learn, and MLflow.
+
+I have certifications in AI/ML from NetsolTech, Python for Everybody from Coursera, and Intro to SQL from Coursera. I was Lead of GBSO Coding Club from 2024 to 2025 and Tech Lead of Soft-Tech Community from 2024 to 2025. I had a LinkedIn post that got 13000 impressions showing I can communicate technical concepts clearly.
+
+I have built 4 major projects: NetsolChatbot, AI Voice Khata, CryptoChat, and HelmetEye. All projects are available on my GitHub at github.com/tashfeen786.
