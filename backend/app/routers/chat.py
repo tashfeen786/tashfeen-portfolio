@@ -11,14 +11,17 @@ router = APIRouter()
 class ChatRequest(BaseModel):
     message: str
 
-def stream_response(prompt: str):
+def stream_response(system: str, user: str):
     try:
         client = groq.Groq(api_key=GROQ_API_KEY)
         stream = client.chat.completions.create(
             model=GROQ_MODEL,
-            messages=[{"role": "user", "content": prompt}],
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user",   "content": user},
+            ],
             max_tokens=512,
-            temperature=0.7,
+            temperature=0.75,
             stream=True,
         )
         for chunk in stream:
@@ -31,9 +34,9 @@ def stream_response(prompt: str):
 
 @router.post("/api/chat")
 async def chat(req: ChatRequest):
-    prompt = build_prompt(req.message)
+    system, user = build_prompt(req.message)
     return StreamingResponse(
-        stream_response(prompt),
+        stream_response(system, user),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
