@@ -1,4 +1,4 @@
-import { Project, Experience, WritingPost } from '../types';
+import type { Project, Experience, WritingPost } from '../types'
 
 export const projects: Project[] = [
   {
@@ -12,17 +12,24 @@ export const projects: Project[] = [
   {
     title: 'AI Voice Khata',
     icon: '🎙️',
-    description: 'WhatsApp-native voice bookkeeping for Pakistan\'s informal economy. Roman Urdu voice → AI extracts transactions → live ledger.',
+    description: "WhatsApp-native voice bookkeeping for Pakistan's informal economy. Roman Urdu voice to AI extracts transactions to live ledger.",
     tags: ['OpenAI Whisper', 'GPT-4o', 'Supabase', 'FastAPI'],
     badge: 'WhatsApp API',
-    github: 'https://github.com/tashfeen786',
+    github: 'https://github.com/tashfeen786/AI_voice_khata',
+  },
+  {
+    title: 'NLP & RAG Curriculum',
+    icon: '🧠',
+    description: '14-module hands-on curriculum covering full RAG pipeline, LangChain, LangGraph, and RAGAS evaluation from fundamentals to production.',
+    tags: ['LangChain', 'LangGraph', 'RAGAS', 'Python'],
+    github: 'https://github.com/tashfeen786/NLP',
   },
   {
     title: 'CryptoChat',
     icon: '📈',
     description: 'RAG system combining real-time Binance market data with LLM reasoning for personalized investment guidance.',
     tags: ['LangChain', 'LLaMA3', 'Binance API', 'PostgreSQL'],
-    github: 'https://github.com/tashfeen786',
+    github: 'https://github.com/tashfeen786/Crypto_ChatBOt_system',
   },
   {
     title: 'HelmetEye (FYP)',
@@ -30,9 +37,16 @@ export const projects: Project[] = [
     description: 'Real-time helmet violation detection and number plate extraction using YOLOv12 + OCR for traffic surveillance.',
     tags: ['YOLOv12', 'OpenCV', 'OCR', 'React'],
     badge: 'FYP',
-    github: 'https://github.com/tashfeen786',
+    github: 'https://github.com/tashfeen786/HelmetEye',
   },
-];
+  {
+    title: 'STEMETA ML Projects',
+    icon: '🔬',
+    description: '9 real-world ML projects: fraud detection, churn prediction, NLP spam classifier, healthcare and FinTech models.',
+    tags: ['Scikit-learn', 'Flask', 'NLP', 'Pandas'],
+    github: 'https://github.com/tashfeen786/STEMETA_Intership_Projects',
+  },
+]
 
 export const experiences: Experience[] = [
   {
@@ -60,11 +74,11 @@ export const experiences: Experience[] = [
     company: 'Stameta.ai, Islamabad',
     period: 'June 2025 – July 2025',
     points: [
+      'Completed 9 real-world ML projects including fraud detection, churn prediction, NLP spam classification',
       'YOLO-based object detection for real-world industry applications',
-      'Model integration and deployment workflows',
     ],
   },
-];
+]
 
 export const writingPosts: WritingPost[] = [
   {
@@ -72,4 +86,4 @@ export const writingPosts: WritingPost[] = [
     impressions: '13.2k',
     url: 'https://www.linkedin.com/in/tashfeen-aziz/',
   },
-];
+]
