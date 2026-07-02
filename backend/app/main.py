@@ -6,7 +6,7 @@ from app.core.rag import init_rag
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("Starting up — building RAG vector store...")
+    print("Starting up — loading context...")
     init_rag()
     print("Ready.")
     yield
@@ -15,7 +15,12 @@ app = FastAPI(title="Tashfeen Portfolio API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://tashfeen.dev"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://tashfeen-portfolio-chi.vercel.app",
+        "https://tashfeen-portfolio.vercel.app",
+        "https://tashfeen.dev",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
