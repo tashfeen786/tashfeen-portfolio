@@ -115,7 +115,7 @@ export default function Hero() {
               style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.22)', color: '#10B981' }}>
               <span className="w-[7px] h-[7px] rounded-full animate-pulse"
                 style={{ background: '#10B981', boxShadow: '0 0 8px #10B981', display: 'inline-block' }} />
-              <span className="font-mono" style={{ fontSize: '11px' }}>Open to Opportunities · Lahore, Pakistan</span>
+              <span className="font-mono" style={{ fontSize: '11px' }}>Open to Opportunities ·Remort, Pakistan</span>
             </div>
 
             {/* Name */}
@@ -196,7 +196,7 @@ export default function Hero() {
 
           {/* RIGHT: Photo */}
           <div className="flex items-center justify-center" style={{ height: '100%' }}>
-            <div className="relative" style={{ width: '360px', height: '440px' }}>
+            <div className="relative" style={{ width: '560px', height: '640px' }}>
               <div className="absolute inset-0 pointer-events-none" style={{ borderRadius: '16px',
                 background: 'radial-gradient(ellipse 80% 70% at 50% 55%, rgba(16,185,129,0.08) 0%, transparent 70%)' }} />
               <img src="/photo.png" alt="Tashfeen Aziz"
