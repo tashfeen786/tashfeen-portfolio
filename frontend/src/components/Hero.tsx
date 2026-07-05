@@ -95,148 +95,155 @@ export default function Hero() {
     const ro = new ResizeObserver(() => resize())
     ro.observe(canvas)
     window.addEventListener('resize', resize)
-    return () => { running = false; clearTimeout(timer); cancelAnimationFrame(animId); ro.disconnect(); window.removeEventListener('resize', resize) }
+    return () => {
+      running = false; clearTimeout(timer); cancelAnimationFrame(animId)
+      ro.disconnect(); window.removeEventListener('resize', resize)
+    }
   }, [])
 
   return (
-    <>
-      <div style={{ height: '64px' }} />
-      <section id="about" className="relative overflow-hidden" style={{ minHeight: 'calc(100vh - 64px)' }}>
-        <canvas ref={canvasRef} className="absolute inset-0 z-0" style={{ width: '100%', height: '100%' }} />
+    <section
+      id="about"
+      className="relative overflow-hidden"
+      style={{ minHeight: '100vh' }}
+    >
+      <canvas ref={canvasRef} className="absolute inset-0 z-0" style={{ width: '100%', height: '100%' }} />
 
-        <div className="relative z-10 grid items-center"
-          style={{ gridTemplateColumns: '1fr 1fr', minHeight: 'calc(100vh - 64px)', padding: '48px 56px', gap: '40px' }}>
+      <div
+        className="relative z-10 grid items-center"
+        style={{
+          gridTemplateColumns: '1fr 1fr',
+          minHeight: '100vh',
+          padding: '88px 56px 48px 56px',
+          gap: '40px',
+        }}
+      >
+        {/* LEFT */}
+        <div className="flex flex-col justify-center">
 
-          {/* LEFT */}
-          <div className="flex flex-col justify-center">
-
-            {/* Status badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full w-fit mb-6"
-              style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.22)', color: '#10B981' }}>
-              <span className="w-[7px] h-[7px] rounded-full animate-pulse"
-                style={{ background: '#10B981', boxShadow: '0 0 8px #10B981', display: 'inline-block' }} />
-              <span className="font-mono" style={{ fontSize: '11px' }}>Open to Opportunities ·Remort, Pakistan</span>
-            </div>
-
-            {/* Name */}
-            <h1 className="font-grotesk font-extrabold tracking-[-3px]"
-              style={{ fontSize: '66px', lineHeight: '0.93', color: '#F0FDF4', marginBottom: '18px' }}>
-              Tashfeen
-              <span className="block" style={{ color: '#10B981' }}>Aziz</span>
-            </h1>
-
-            {/* Professional tagline */}
-            <p className="font-grotesk font-semibold mb-4"
-              style={{ fontSize: '15px', color: '#888', lineHeight: '1.5', maxWidth: '420px' }}>
-              AI & Machine Learning Engineer building production-ready LLM applications, Agentic AI systems, and RAG pipelines.
-            </p>
-
-            {/* Description */}
-            <p style={{ fontSize: '13.5px', color: '#2E2E2E', lineHeight: '1.75', maxWidth: '420px', marginBottom: '28px' }}>
-              Building production-grade AI solutions using Python, FastAPI, LangGraph, LangChain, RAG, and modern LLMs.
-              Passionate about designing intelligent systems that solve real-world business problems.
-            </p>
-
-            {/* Tech chips */}
-            <div className="flex flex-wrap gap-2" style={{ marginBottom: '32px' }}>
-              {['LangGraph', 'RAG Systems', 'FastAPI', 'LLMs', 'Computer Vision'].map(s => (
-                <span key={s} className="px-3 py-1 rounded-md font-mono flex items-center gap-1"
-                  style={{ fontSize: '10.5px', background: 'rgba(99,102,241,0.09)', border: '1px solid rgba(99,102,241,0.2)', color: '#818CF8' }}>
-                  <span style={{ color: '#10B981', fontSize: '8px' }}>◈</span>{s}
-                </span>
-              ))}
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex gap-3 flex-wrap" style={{ marginBottom: '24px' }}>
-              <button
-                onClick={() => document.getElementById('chat-widget')?.scrollIntoView({ behavior: 'smooth' })}
-                className="font-grotesk font-bold rounded-xl transition-all duration-200 hover:-translate-y-0.5"
-                style={{ background: '#10B981', color: '#080808', fontSize: '13px', padding: '11px 22px' }}>
-                🤖 Ask my AI
-              </button>
-              <a href="#projects"
-                className="font-grotesk font-semibold rounded-xl transition-colors duration-200"
-                style={{ color: '#F0FDF4', border: '1px solid #222', fontSize: '13px', padding: '11px 22px', display: 'inline-block' }}>
-                View Projects
-              </a>
-              <a href="/resume.pdf" download="Tashfeen_Aziz_Resume.pdf"
-                className="font-grotesk font-semibold rounded-xl transition-colors duration-200 flex items-center gap-2"
-                style={{ color: '#10B981', border: '1px solid rgba(16,185,129,0.3)', fontSize: '13px', padding: '11px 22px', background: 'rgba(16,185,129,0.06)' }}>
-                ↓ Resume
-              </a>
-              <a href="#contact"
-                className="font-grotesk font-semibold rounded-xl transition-colors duration-200"
-                style={{ color: '#888', border: '1px solid #1A1A1A', fontSize: '13px', padding: '11px 22px', display: 'inline-block' }}>
-                Contact
-              </a>
-            </div>
-
-            {/* Social links */}
-            <div className="flex items-center gap-4">
-              <a href="https://linkedin.com/in/tashfeen-aziz" target="_blank" rel="noopener noreferrer"
-                className="font-mono transition-colors duration-200 hover:text-white"
-                style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <span style={{ color: '#10B981' }}>↗</span> LinkedIn
-              </a>
-              <span style={{ color: '#222' }}>·</span>
-              <a href="https://github.com/tashfeen786" target="_blank" rel="noopener noreferrer"
-                className="font-mono transition-colors duration-200 hover:text-white"
-                style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <span style={{ color: '#10B981' }}>↗</span> GitHub
-              </a>
-              <span style={{ color: '#222' }}>·</span>
-              <a href="mailto:tashfeen247@gmail.com"
-                className="font-mono transition-colors duration-200 hover:text-white"
-                style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <span style={{ color: '#10B981' }}>↗</span> Email
-              </a>
-            </div>
+          {/* Status badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full w-fit mb-6"
+            style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.22)', color: '#10B981' }}>
+            <span className="w-[7px] h-[7px] rounded-full animate-pulse"
+              style={{ background: '#10B981', boxShadow: '0 0 8px #10B981', display: 'inline-block' }} />
+            <span className="font-mono" style={{ fontSize: '11px' }}>Open to Opportunities · Lahore, Pakistan</span>
           </div>
 
-          {/* RIGHT: Photo */}
-          <div className="flex items-center justify-center" style={{ height: '100%' }}>
-            <div className="relative" style={{ width: '560px', height: '640px' }}>
-              <div className="absolute inset-0 pointer-events-none" style={{ borderRadius: '16px',
-                background: 'radial-gradient(ellipse 80% 70% at 50% 55%, rgba(16,185,129,0.08) 0%, transparent 70%)' }} />
-              <img src="/photo.png" alt="Tashfeen Aziz"
-                style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center center',
-                  display: 'block', position: 'relative', zIndex: 1 }} />
-              <div className="absolute inset-x-0 top-0 pointer-events-none"
-                style={{ height: '70px', zIndex: 2, background: 'linear-gradient(180deg, #080808 0%, transparent 100%)' }} />
-              <div className="absolute inset-x-0 bottom-0 pointer-events-none"
-                style={{ height: '60px', zIndex: 2, background: 'linear-gradient(0deg, #080808 0%, transparent 100%)' }} />
-              <div className="absolute inset-y-0 left-0 pointer-events-none"
-                style={{ width: '48px', zIndex: 2, background: 'linear-gradient(90deg, #080808 0%, transparent 100%)' }} />
-              <div className="absolute inset-y-0 right-0 pointer-events-none"
-                style={{ width: '48px', zIndex: 2, background: 'linear-gradient(270deg, #080808 0%, transparent 100%)' }} />
+          {/* Name */}
+          <h1 className="font-grotesk font-extrabold tracking-[-3px]"
+            style={{ fontSize: '66px', lineHeight: '0.93', color: '#F0FDF4', marginBottom: '18px' }}>
+            Tashfeen
+            <span className="block" style={{ color: '#10B981' }}>Aziz</span>
+          </h1>
 
-              {/* Stat: 3+ */}
-              <div className="absolute rounded-xl" style={{ zIndex: 3, left: '-24px', top: '35%',
-                background: 'rgba(8,8,8,0.93)', border: '1px solid rgba(16,185,129,0.22)',
-                backdropFilter: 'blur(8px)', padding: '12px 16px' }}>
-                <div className="font-grotesk font-bold leading-none" style={{ fontSize: '22px', color: '#10B981' }}>3+</div>
-                <div className="font-mono" style={{ fontSize: '10px', color: '#444', marginTop: '4px' }}>Production AI<br />Systems</div>
-              </div>
+          {/* Tagline */}
+          <p className="font-grotesk font-semibold mb-4"
+            style={{ fontSize: '15px', color: '#888', lineHeight: '1.5', maxWidth: '420px' }}>
+            AI & Machine Learning Engineer building production-ready LLM applications, Agentic AI systems, and RAG pipelines.
+          </p>
 
-              {/* Stat: 13k */}
-              <div className="absolute rounded-xl" style={{ zIndex: 3, right: '-24px', top: '20%',
-                background: 'rgba(8,8,8,0.93)', border: '1px solid rgba(16,185,129,0.22)',
-                backdropFilter: 'blur(8px)', padding: '12px 16px' }}>
-                <div className="font-grotesk font-bold leading-none" style={{ fontSize: '22px', color: '#10B981' }}>6</div>
-                <div className="font-mono" style={{ fontSize: '10px', color: '#444', marginTop: '4px' }}>AI Systems<br />Built</div>
-              </div>
-            </div>
+          {/* Description */}
+          <p style={{ fontSize: '13.5px', color: '#2E2E2E', lineHeight: '1.75', maxWidth: '420px', marginBottom: '28px' }}>
+            Building production-grade AI solutions using Python, FastAPI, LangGraph, LangChain, RAG, and modern LLMs.
+            Passionate about designing intelligent systems that solve real-world business problems.
+          </p>
+
+          {/* Tech chips */}
+          <div className="flex flex-wrap gap-2" style={{ marginBottom: '32px' }}>
+            {['LangGraph', 'RAG Systems', 'FastAPI', 'LLMs', 'Computer Vision'].map(s => (
+              <span key={s} className="px-3 py-1 rounded-md font-mono flex items-center gap-1"
+                style={{ fontSize: '10.5px', background: 'rgba(99,102,241,0.09)', border: '1px solid rgba(99,102,241,0.2)', color: '#818CF8' }}>
+                <span style={{ color: '#10B981', fontSize: '8px' }}>◈</span>{s}
+              </span>
+            ))}
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex gap-3 flex-wrap" style={{ marginBottom: '24px' }}>
+            <button
+              onClick={() => document.getElementById('chat-widget')?.scrollIntoView({ behavior: 'smooth' })}
+              className="font-grotesk font-bold rounded-xl transition-all duration-200 hover:-translate-y-0.5"
+              style={{ background: '#10B981', color: '#080808', fontSize: '13px', padding: '11px 22px', border: 'none', cursor: 'pointer' }}>
+              🤖 Ask my AI
+            </button>
+            <a href="#projects"
+              className="font-grotesk font-semibold rounded-xl transition-colors duration-200"
+              style={{ color: '#F0FDF4', border: '1px solid #222', fontSize: '13px', padding: '11px 22px', display: 'inline-block' }}>
+              View Projects
+            </a>
+            <a href="/resume.pdf" download="Tashfeen_Aziz_Resume.pdf"
+              className="font-grotesk font-semibold rounded-xl transition-colors duration-200 flex items-center gap-2"
+              style={{ color: '#10B981', border: '1px solid rgba(16,185,129,0.3)', fontSize: '13px', padding: '11px 22px', background: 'rgba(16,185,129,0.06)' }}>
+              ↓ Resume
+            </a>
+            <a href="#contact"
+              className="font-grotesk font-semibold rounded-xl transition-colors duration-200"
+              style={{ color: '#888', border: '1px solid #1A1A1A', fontSize: '13px', padding: '11px 22px', display: 'inline-block' }}>
+              Contact
+            </a>
+          </div>
+
+          {/* Social links */}
+          <div className="flex items-center gap-4">
+            <a href="https://linkedin.com/in/tashfeen-aziz" target="_blank" rel="noopener noreferrer"
+              className="font-mono transition-colors duration-200 hover:text-white"
+              style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <span style={{ color: '#10B981' }}>↗</span> LinkedIn
+            </a>
+            <span style={{ color: '#222' }}>·</span>
+            <a href="https://github.com/tashfeen786" target="_blank" rel="noopener noreferrer"
+              className="font-mono transition-colors duration-200 hover:text-white"
+              style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <span style={{ color: '#10B981' }}>↗</span> GitHub
+            </a>
+            <span style={{ color: '#222' }}>·</span>
+            <a href="mailto:tashfeen247@gmail.com"
+              className="font-mono transition-colors duration-200 hover:text-white"
+              style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <span style={{ color: '#10B981' }}>↗</span> Email
+            </a>
           </div>
         </div>
 
-        {/* Scroll hint */}
-        <div className="absolute flex items-center gap-2 font-mono"
-          style={{ bottom: '24px', left: '56px', zIndex: 10, fontSize: '10px', color: '#222' }}>
-          <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, #10B981, transparent)' }} />
-          scroll to explore
+        {/* RIGHT: Photo */}
+        <div className="flex items-center justify-center" style={{ height: '100%' }}>
+          <div className="relative" style={{ width: '360px', height: '440px' }}>
+            <div className="absolute inset-0 pointer-events-none"
+              style={{ borderRadius: '16px', background: 'radial-gradient(ellipse 80% 70% at 50% 55%, rgba(16,185,129,0.08) 0%, transparent 70%)' }} />
+            <img src="/photo.png" alt="Tashfeen Aziz"
+              style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center center', display: 'block', position: 'relative', zIndex: 1 }} />
+            <div className="absolute inset-x-0 top-0 pointer-events-none"
+              style={{ height: '70px', zIndex: 2, background: 'linear-gradient(180deg, #080808 0%, transparent 100%)' }} />
+            <div className="absolute inset-x-0 bottom-0 pointer-events-none"
+              style={{ height: '60px', zIndex: 2, background: 'linear-gradient(0deg, #080808 0%, transparent 100%)' }} />
+            <div className="absolute inset-y-0 left-0 pointer-events-none"
+              style={{ width: '48px', zIndex: 2, background: 'linear-gradient(90deg, #080808 0%, transparent 100%)' }} />
+            <div className="absolute inset-y-0 right-0 pointer-events-none"
+              style={{ width: '48px', zIndex: 2, background: 'linear-gradient(270deg, #080808 0%, transparent 100%)' }} />
+
+            {/* Stat: 3+ */}
+            <div className="absolute rounded-xl"
+              style={{ zIndex: 3, left: '-24px', top: '35%', background: 'rgba(8,8,8,0.93)', border: '1px solid rgba(16,185,129,0.22)', backdropFilter: 'blur(8px)', padding: '12px 16px' }}>
+              <div className="font-grotesk font-bold leading-none" style={{ fontSize: '22px', color: '#10B981' }}>3+</div>
+              <div className="font-mono" style={{ fontSize: '10px', color: '#444', marginTop: '4px' }}>Production AI<br />Systems</div>
+            </div>
+
+            {/* Stat: 6 */}
+            <div className="absolute rounded-xl"
+              style={{ zIndex: 3, right: '-24px', top: '20%', background: 'rgba(8,8,8,0.93)', border: '1px solid rgba(16,185,129,0.22)', backdropFilter: 'blur(8px)', padding: '12px 16px' }}>
+              <div className="font-grotesk font-bold leading-none" style={{ fontSize: '22px', color: '#10B981' }}>6</div>
+              <div className="font-mono" style={{ fontSize: '10px', color: '#444', marginTop: '4px' }}>AI Systems<br />Built</div>
+            </div>
+          </div>
         </div>
-      </section>
-    </>
+      </div>
+
+      {/* Scroll hint */}
+      <div className="absolute flex items-center gap-2 font-mono"
+        style={{ bottom: '24px', left: '56px', zIndex: 10, fontSize: '10px', color: '#222' }}>
+        <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, #10B981, transparent)' }} />
+        scroll to explore
+      </div>
+    </section>
   )
 }
