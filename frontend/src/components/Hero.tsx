@@ -223,8 +223,8 @@ export default function Hero() {
               <div className="absolute rounded-xl" style={{ zIndex: 3, right: '-24px', top: '20%',
                 background: 'rgba(8,8,8,0.93)', border: '1px solid rgba(16,185,129,0.22)',
                 backdropFilter: 'blur(8px)', padding: '12px 16px' }}>
-                <div className="font-grotesk font-bold leading-none" style={{ fontSize: '22px', color: '#10B981' }}>10+</div>
-                <div className="font-mono" style={{ fontSize: '10px', color: '#444', marginTop: '4px' }}>AI Projects<br />Delivered</div>
+                <div className="font-grotesk font-bold leading-none" style={{ fontSize: '22px', color: '#10B981' }}>6</div>
+                <div className="font-mono" style={{ fontSize: '10px', color: '#444', marginTop: '4px' }}>AI Systems<br />Built</div>
               </div>
             </div>
           </div>
