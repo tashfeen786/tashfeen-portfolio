@@ -207,7 +207,7 @@ export default function Hero() {
 
         {/* RIGHT: Photo */}
         <div className="flex items-center justify-center" style={{ height: '100%' }}>
-          <div className="relative" style={{ width: '360px', height: '440px' }}>
+          <div className="relative" style={{ width: '560px', height: '640px' }}>
             <div className="absolute inset-0 pointer-events-none"
               style={{ borderRadius: '16px', background: 'radial-gradient(ellipse 80% 70% at 50% 55%, rgba(16,185,129,0.08) 0%, transparent 70%)' }} />
             <img src="/photo.png" alt="Tashfeen Aziz"
