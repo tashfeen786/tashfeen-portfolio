@@ -114,7 +114,7 @@ export default function Hero() {
         style={{
           gridTemplateColumns: '1fr 1fr',
           minHeight: '100vh',
-          padding: '88px 56px 48px 56px',
+          padding: '72px 56px 48px 56px',
           gap: '40px',
         }}
       >
