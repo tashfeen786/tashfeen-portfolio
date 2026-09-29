@@ -217,7 +217,7 @@ export default function Hero() {
 
           {/* CTA Buttons */}
           <div
-            className="flex flex-wrap gap-3 mb-10 animate-slide-up"
+            className="flex flex-wrap items-center gap-3 mb-10 animate-slide-up"
             style={{ animationDelay: '300ms', opacity: 0 }}
           >
             <button
@@ -249,6 +249,27 @@ export default function Hero() {
             >
               Let's Connect
             </button>
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 font-grotesk font-semibold rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:text-accent"
+              style={{
+                color: '#f0f0f5',
+                border: '1px solid #2a2a3e',
+                fontSize: '14px',
+                padding: '12px 24px',
+                background: 'rgba(255,255,255,0.02)',
+                textDecoration: 'none',
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Resume
+            </a>
           </div>
 
           {/* Social links */}
