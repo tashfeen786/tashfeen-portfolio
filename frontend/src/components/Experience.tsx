@@ -1,46 +1,91 @@
 import { experiences } from '../data'
+import { useReveal } from '../hooks/useReveal'
 
 export default function Experience() {
+  const headerRef = useReveal()
+
   return (
     <section id="experience" className="py-24 px-6 md:px-16 bg-surface">
       <div className="max-w-6xl mx-auto">
 
-        <div className="flex items-center gap-4 mb-14">
-          <h2 className="font-grotesk font-bold text-4xl tracking-tight">Experience</h2>
-          <div className="flex-1 max-w-[200px] h-px bg-gradient-to-r from-amber to-transparent" />
+        {/* Section header */}
+        <div ref={headerRef as React.RefObject<HTMLDivElement>} className="reveal mb-16">
+          <span className="font-mono text-accent text-xs tracking-wider uppercase mb-3 block">
+            Experience
+          </span>
+          <h2 className="font-grotesk font-bold text-3xl md:text-4xl tracking-tight text-text-primary">
+            Professional Journey
+          </h2>
+          <div className="w-12 h-px bg-accent mt-4" />
         </div>
 
+        {/* Timeline */}
         <div className="relative">
-          <div className="absolute left-0 top-2 bottom-2 w-px bg-border" />
+          {/* Vertical line */}
+          <div
+            className="absolute left-4 md:left-6 top-0 bottom-0 w-px"
+            style={{
+              background: 'linear-gradient(180deg, rgba(124,92,252,0.3) 0%, rgba(124,92,252,0.05) 100%)',
+            }}
+          />
 
-          <div className="flex flex-col gap-12 pl-8">
+          <div className="flex flex-col gap-10">
             {experiences.map((exp, i) => (
-              <div key={i} className="relative">
-                <div className="absolute -left-[33px] top-1.5 w-3 h-3 rounded-full bg-amber border-2 border-bg shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
-
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-1 mb-4">
-                  <div>
-                    <h3 className="font-grotesk font-semibold text-lg tracking-tight">{exp.role}</h3>
-                    <p className="text-amber text-sm font-medium">{exp.company}</p>
-                  </div>
-                  <span className="font-mono text-xs text-muted bg-bg border border-border px-3 py-1 rounded-full whitespace-nowrap">
-                    {exp.period}
-                  </span>
-                </div>
-
-                <ul className="flex flex-col gap-2">
-                  {exp.points.map((point, j) => (
-                    <li key={j} className="text-muted text-sm leading-relaxed flex gap-3">
-                      <span className="text-amber mt-1.5 text-xs flex-shrink-0">▸</span>
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <TimelineCard key={i} exp={exp} index={i} />
             ))}
           </div>
         </div>
       </div>
     </section>
+  )
+}
+
+function TimelineCard({ exp, index }: { exp: typeof import('../data').experiences[0]; index: number }) {
+  const cardRef = useReveal(0.15)
+
+  return (
+    <div
+      ref={cardRef as React.RefObject<HTMLDivElement>}
+      className="reveal relative pl-12 md:pl-16"
+      style={{ transitionDelay: `${index * 100}ms` }}
+    >
+      {/* Timeline dot */}
+      <div
+        className="absolute left-[10px] md:left-[18px] top-2 w-3 h-3 rounded-full"
+        style={{
+          background: '#7c5cfc',
+          boxShadow: '0 0 12px rgba(124,92,252,0.4)',
+          border: '2px solid #0a0a0f',
+        }}
+      />
+
+      {/* Card */}
+      <div className="bg-bg border border-border rounded-xl p-6 md:p-7 hover:border-border-hover transition-colors duration-300">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-5">
+          <div>
+            <h3 className="font-grotesk font-semibold text-lg text-text-primary tracking-tight">
+              {exp.role}
+            </h3>
+            <p className="text-accent text-sm font-medium mt-0.5">
+              {exp.company} — {exp.location}
+            </p>
+          </div>
+          <span
+            className="font-mono text-xs text-muted bg-surface-2 border border-border px-3 py-1.5 rounded-full whitespace-nowrap w-fit"
+          >
+            {exp.period}
+          </span>
+        </div>
+
+        <ul className="flex flex-col gap-2.5">
+          {exp.points.map((point, j) => (
+            <li key={j} className="text-text-secondary text-sm leading-relaxed flex gap-3">
+              <span className="text-accent mt-1 text-xs flex-shrink-0">▸</span>
+              {point}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   )
 }
