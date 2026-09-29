@@ -1,96 +1,113 @@
-import { useState } from 'react'
-import { Mail, Code2, Link } from 'lucide-react'
+import { useReveal } from '../hooks/useReveal'
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' })
-  const [sent, setSent] = useState(false)
-
-  function handleSend() {
-    if (!form.name || !form.email || !form.message) return
-    console.log(form)
-    setSent(true)
-  }
+  const headerRef = useReveal()
+  const contentRef = useReveal(0.15)
 
   return (
     <section id="contact" className="py-24 px-6 md:px-16">
       <div className="max-w-6xl mx-auto">
 
-        <div className="flex items-center gap-4 mb-14">
-          <h2 className="font-grotesk font-bold text-4xl tracking-tight">Contact</h2>
-          <div className="flex-1 max-w-[200px] h-px bg-gradient-to-r from-amber to-transparent" />
+        {/* Header */}
+        <div ref={headerRef as React.RefObject<HTMLDivElement>} className="reveal text-center mb-16">
+          <span className="font-mono text-accent text-xs tracking-wider uppercase mb-3 block">
+            Contact
+          </span>
+          <h2 className="font-grotesk font-bold text-3xl md:text-4xl tracking-tight text-text-primary mb-4">
+            Let's Build Something Intelligent.
+          </h2>
+          <p className="text-text-secondary text-base leading-relaxed max-w-xl mx-auto">
+            I'm open to AI/ML engineering opportunities, collaborations, and interesting AI projects.
+            Let's connect and build something meaningful.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12">
-          <div>
-            <p className="text-muted text-base leading-relaxed mb-8">
-              Open to AI engineering roles, freelance projects, and collaborations. Let's build something useful.
-            </p>
-            <div className="flex flex-col gap-4">
-              <a
-                href="mailto:tashfeen247@gmail.com"
-                className="flex items-center gap-3 text-muted hover:text-white transition-colors text-sm"
+        {/* Contact cards */}
+        <div ref={contentRef as React.RefObject<HTMLDivElement>} className="reveal max-w-2xl mx-auto">
+          <div className="grid sm:grid-cols-3 gap-4 mb-10">
+
+            {/* Email */}
+            <a
+              href="mailto:tashfeen247@gmail.com"
+              className="group bg-surface border border-border rounded-xl p-5 text-center hover:border-accent-border transition-all duration-300"
+            >
+              <div
+                className="w-10 h-10 mx-auto rounded-lg flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110"
+                style={{ background: 'rgba(124,92,252,0.06)', border: '1px solid rgba(124,92,252,0.12)' }}
               >
-                <Mail size={16} className="text-amber" />
-                tashfeen247@gmail.com
-              </a>
-              <a
-                href="https://github.com/tashfeen786"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-muted hover:text-white transition-colors text-sm"
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c5cfc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </div>
+              <p className="font-mono text-xs text-muted mb-1">Email</p>
+              <p className="text-text-primary text-sm font-medium">tashfeen247@gmail.com</p>
+            </a>
+
+            {/* GitHub */}
+            <a
+              href="https://github.com/tashfeen786"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-surface border border-border rounded-xl p-5 text-center hover:border-accent-border transition-all duration-300"
+            >
+              <div
+                className="w-10 h-10 mx-auto rounded-lg flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110"
+                style={{ background: 'rgba(124,92,252,0.06)', border: '1px solid rgba(124,92,252,0.12)' }}
               >
-                <Code2 size={16} className="text-amber" />
-                github.com/tashfeen786
-              </a>
-              <a
-                href="https://www.linkedin.com/in/tashfeen-aziz/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-muted hover:text-white transition-colors text-sm"
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#7c5cfc">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </div>
+              <p className="font-mono text-xs text-muted mb-1">GitHub</p>
+              <p className="text-text-primary text-sm font-medium">tashfeen786</p>
+            </a>
+
+            {/* LinkedIn */}
+            <a
+              href="https://linkedin.com/in/tashfeen-aziz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-surface border border-border rounded-xl p-5 text-center hover:border-accent-border transition-all duration-300"
+            >
+              <div
+                className="w-10 h-10 mx-auto rounded-lg flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110"
+                style={{ background: 'rgba(124,92,252,0.06)', border: '1px solid rgba(124,92,252,0.12)' }}
               >
-                <Link size={16} className="text-amber" />
-                linkedin.com/in/tashfeen-aziz
-              </a>
-            </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#7c5cfc">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </div>
+              <p className="font-mono text-xs text-muted mb-1">LinkedIn</p>
+              <p className="text-text-primary text-sm font-medium">tashfeen-aziz</p>
+            </a>
           </div>
 
-          <div className="flex flex-col gap-4">
-            {sent ? (
-              <div className="bg-green/10 border border-green/30 text-green rounded-xl p-6 font-grotesk font-medium">
-                Message sent! I'll get back to you soon.
-              </div>
-            ) : (
-              <>
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  value={form.name}
-                  onChange={e => setForm({ ...form, name: e.target.value })}
-                  className="bg-surface border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-muted outline-none focus:border-amber/50 transition-colors"
-                />
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={form.email}
-                  onChange={e => setForm({ ...form, email: e.target.value })}
-                  className="bg-surface border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-muted outline-none focus:border-amber/50 transition-colors"
-                />
-                <textarea
-                  placeholder="Tell me about your project or role..."
-                  rows={4}
-                  value={form.message}
-                  onChange={e => setForm({ ...form, message: e.target.value })}
-                  className="bg-surface border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-muted outline-none focus:border-amber/50 transition-colors resize-none"
-                />
-                <button
-                  onClick={handleSend}
-                  className="bg-amber text-bg font-grotesk font-bold text-sm px-6 py-3.5 rounded-xl hover:bg-amber-lt transition-colors duration-200 w-fit"
-                >
-                  Send Message
-                </button>
-              </>
-            )}
+          {/* CTA button */}
+          <div className="text-center">
+            <a
+              href="mailto:tashfeen247@gmail.com"
+              className="inline-flex items-center gap-2 font-grotesk font-semibold text-sm px-6 py-3 rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+              style={{
+                background: '#7c5cfc',
+                color: '#fff',
+                boxShadow: '0 4px 16px rgba(124,92,252,0.25)',
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              Get In Touch
+            </a>
           </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center mt-20 pt-10 border-t border-border">
+          <p className="font-mono text-xs text-muted">
+            © {new Date().getFullYear()} Tashfeen Aziz · Built with React & TypeScript
+          </p>
         </div>
       </div>
     </section>
