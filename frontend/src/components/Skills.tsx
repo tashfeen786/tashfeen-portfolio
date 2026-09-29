@@ -33,6 +33,11 @@ export default function Skills() {
 function SkillCard({ group, index }: { group: typeof import('../data').skillGroups[0]; index: number }) {
   const cardRef = useReveal(0.1)
 
+  const prioritySkills = [
+    'Python', 'Generative AI', 'LLMs', 'RAG', 'LangGraph',
+    'LangChain', 'AI Agents', 'FastAPI', 'Machine Learning', 'Deep Learning'
+  ]
+
   return (
     <div
       ref={cardRef as React.RefObject<HTMLDivElement>}
@@ -46,14 +51,26 @@ function SkillCard({ group, index }: { group: typeof import('../data').skillGrou
         </h3>
       </div>
       <div className="flex flex-wrap gap-2">
-        {group.skills.map(skill => (
-          <span
-            key={skill}
-            className="px-3 py-1.5 rounded-md font-mono text-xs text-text-secondary bg-surface-2 border border-border hover:text-text-primary hover:border-border-hover transition-colors duration-200"
-          >
-            {skill}
-          </span>
-        ))}
+        {group.skills.map(skill => {
+          const isPriority = prioritySkills.includes(skill)
+          return (
+            <span
+              key={skill}
+              className={`px-3 py-1.5 rounded-md font-mono text-xs transition-colors duration-200 ${
+                isPriority
+                  ? 'text-text-primary bg-accent/10 border-accent/40 font-medium'
+                  : 'text-text-secondary bg-surface-2 border-border hover:text-text-primary hover:border-border-hover'
+              }`}
+              style={{
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                ...(isPriority ? { borderColor: 'rgba(124,92,252,0.4)', backgroundColor: 'rgba(124,92,252,0.1)' } : {})
+              }}
+            >
+              {skill}
+            </span>
+          )
+        })}
       </div>
     </div>
   )

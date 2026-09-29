@@ -3,6 +3,7 @@ export interface Project {
   description: string
   problem?: string
   solution?: string
+  implementation?: string
   tags: string[]
   features?: string[]
   badge?: string

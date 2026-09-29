@@ -128,6 +128,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     <p className="text-text-secondary text-[13px] leading-relaxed">{project.solution}</p>
                   </div>
                 )}
+                {project.implementation && (
+                  <div>
+                    <h4 className="font-mono text-xs text-muted uppercase tracking-wider mb-1.5">Technical Implementation</h4>
+                    <p className="text-text-secondary text-[13px] leading-relaxed">{project.implementation}</p>
+                  </div>
+                )}
                 {project.features && (
                   <div>
                     <h4 className="font-mono text-xs text-muted uppercase tracking-wider mb-2">Key Features</h4>
