@@ -111,11 +111,11 @@ export const experiences: Experience[] = [
     location: 'Lahore',
     period: '2026',
     points: [
-      'Architected a multi-agent AI assistant using LangGraph, enabling autonomous document Q&A, Text-to-SQL analytics, and Tavily web search.',
-      'Engineered high-performance REST APIs using FastAPI with Server-Sent Events (SSE) for real-time LLM token streaming.',
-      'Implemented an enterprise RAG pipeline using ChromaDB for semantic retrieval of PDF and DOCX documents.',
+      'Developed components for a multi-agent AI assistant using LangGraph, enabling autonomous document Q&A, Text-to-SQL analytics, and Tavily web search.',
+      'Built REST APIs using FastAPI with Server-Sent Events (SSE) for real-time LLM token streaming.',
+      'Implemented a RAG pipeline using ChromaDB for semantic retrieval of PDF and DOCX documents.',
       'Integrated Google Gemini as the core reasoning engine for complex decision-making and dynamic tool calling.',
-      'Deployed production-ready AI services collaborating closely with senior engineering teams.',
+      'Collaborated closely with senior engineering teams to integrate and deploy AI services.',
     ],
   },
   {
@@ -125,8 +125,8 @@ export const experiences: Experience[] = [
     period: '2025',
     points: [
       'Trained and evaluated deep learning models using Python, TensorFlow, and PyTorch in a structured 6-month program.',
-      'Engineered data preprocessing pipelines for computer vision and NLP datasets.',
-      'Optimized model hyperparameters to improve classification accuracy and reduce inference latency.',
+      'Developed data preprocessing pipelines for computer vision and NLP datasets.',
+      'Assisted in optimizing model hyperparameters to improve classification accuracy and reduce inference latency.',
     ],
   },
   {
@@ -135,10 +135,10 @@ export const experiences: Experience[] = [
     location: 'Islamabad',
     period: '2025',
     points: [
-      'Developed 9 end-to-end Machine Learning projects covering financial fraud detection, customer churn prediction, and NLP classifiers.',
-      'Built and evaluated predictive models using Scikit-learn, Pandas, and NumPy, serving them via Flask REST endpoints.',
-      'Trained YOLO-based object detection systems for real-world computer vision industry applications.',
-      'Engineered text preprocessing pipelines for NLP spam detection and sentiment analysis.',
+      'Contributed to 9 Machine Learning projects covering financial fraud detection, customer churn prediction, and NLP classifiers.',
+      'Built and evaluated predictive models using Scikit-learn, Pandas, and NumPy, and assisted in serving them via Flask REST endpoints.',
+      'Trained YOLO-based object detection systems for computer vision industry applications.',
+      'Developed text preprocessing pipelines for NLP spam detection and sentiment analysis.',
     ],
   },
 ]
