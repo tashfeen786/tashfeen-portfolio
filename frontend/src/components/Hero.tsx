@@ -1,17 +1,5 @@
 import { useEffect, useRef } from 'react'
 
-interface Node {
-  x: number; y: number; vx: number; vy: number
-  r: number; label: string; color: string
-  glow: number; glowDir: number; glowSpeed: number
-}
-interface Pulse { from: number; to: number; t: number }
-
-const NODE_LABELS = ['RAG','Tool\nCall','Memory','LLM','Output','Embed','Input','Search']
-const NODE_COLORS = ['#10B981','#6366F1','#2D3748','#10B981','#34D399','#6366F1','#10B981','#2D3748']
-const EDGES = [[0,2],[0,4],[1,2],[1,4],[2,4],[3,4],[4,5],[6,0],[6,1],[7,2]]
-const ACCENT = '#10B981'
-
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -19,478 +7,304 @@ export default function Hero() {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')!
-    let animId: number, W = 0, H = 0
-    let nodes: Node[] = [], pulses: Pulse[] = [], running = false
-    const rand = (a: number, b: number) => a + Math.random() * (b - a)
+    let animId: number
+    let W = 0, H = 0
+    let running = false
+    let time = 0
 
-    function initNodes() {
-      nodes = NODE_LABELS.map((label, i) => ({
-        x: rand(W * 0.55, W * 0.95), y: rand(H * 0.05, H * 0.95),
-        vx: rand(-0.13, 0.13), vy: rand(-0.13, 0.13),
-        r: rand(16, 22), label, color: NODE_COLORS[i],
-        glow: Math.random(), glowDir: Math.random() > 0.5 ? 1 : -1,
-        glowSpeed: rand(0.006, 0.012),
-      }))
+    // Particles for a subtle technical/AI background
+    interface Particle {
+      x: number; y: number
+      vx: number; vy: number
+      size: number; opacity: number
     }
 
+    let particles: Particle[] = []
+
     function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
       const rect = canvas.getBoundingClientRect()
-      W = canvas.width = rect.width || window.innerWidth
-      H = canvas.height = rect.height || window.innerHeight
-      initNodes()
+      W = rect.width
+      H = rect.height
+      canvas.width = W * dpr
+      canvas.height = H * dpr
+      ctx.scale(dpr, dpr)
+      initParticles()
+    }
+
+    function initParticles() {
+      const count = Math.min(Math.floor((W * H) / 12000), 80)
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        size: Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.3 + 0.05,
+      }))
     }
 
     function draw() {
       if (!running) return
+      time += 0.005
       ctx.clearRect(0, 0, W, H)
-      EDGES.forEach(([i, j]) => {
-        if (!nodes[i] || !nodes[j]) return
-        const a = nodes[i], b = nodes[j]
-        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y)
-        ctx.strokeStyle = ACCENT + '11'; ctx.lineWidth = 1; ctx.stroke()
-        const ang = Math.atan2(b.y - a.y, b.x - a.x)
-        const mx = a.x + (b.x - a.x) * 0.58, my = a.y + (b.y - a.y) * 0.58
+
+      // Draw subtle grid
+      ctx.strokeStyle = 'rgba(124, 92, 252, 0.015)'
+      ctx.lineWidth = 0.5
+      const gridSize = 60
+      for (let x = 0; x < W; x += gridSize) {
         ctx.beginPath()
-        ctx.moveTo(mx, my)
-        ctx.lineTo(mx - 6 * Math.cos(ang - 0.38), my - 6 * Math.sin(ang - 0.38))
-        ctx.lineTo(mx - 6 * Math.cos(ang + 0.38), my - 6 * Math.sin(ang + 0.38))
-        ctx.closePath(); ctx.fillStyle = ACCENT + '18'; ctx.fill()
+        ctx.moveTo(x, 0)
+        ctx.lineTo(x, H)
+        ctx.stroke()
+      }
+      for (let y = 0; y < H; y += gridSize) {
+        ctx.beginPath()
+        ctx.moveTo(0, y)
+        ctx.lineTo(W, y)
+        ctx.stroke()
+      }
+
+      // Draw particles
+      particles.forEach(p => {
+        p.x += p.vx
+        p.y += p.vy
+
+        if (p.x < 0) p.x = W
+        if (p.x > W) p.x = 0
+        if (p.y < 0) p.y = H
+        if (p.y > H) p.y = 0
+
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(124, 92, 252, ${p.opacity})`
+        ctx.fill()
       })
-      pulses = pulses.filter(p => p.t <= 1)
-      pulses.forEach(p => {
-        p.t += 0.011
-        if (!nodes[p.from] || !nodes[p.to]) return
-        const a = nodes[p.from], b = nodes[p.to]
-        const px = a.x + (b.x - a.x) * p.t, py = a.y + (b.y - a.y) * p.t
-        const g = ctx.createRadialGradient(px, py, 0, px, py, 11)
-        g.addColorStop(0, ACCENT + 'CC'); g.addColorStop(0.5, ACCENT + '22'); g.addColorStop(1, 'transparent')
-        ctx.beginPath(); ctx.arc(px, py, 11, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill()
-        ctx.beginPath(); ctx.arc(px, py, 2, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill()
-      })
-      nodes.forEach(n => {
-        n.glow += n.glowSpeed * n.glowDir
-        if (n.glow > 1 || n.glow < 0.1) n.glowDir *= -1
-        const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 2.2)
-        g.addColorStop(0, n.color + '20'); g.addColorStop(1, 'transparent')
-        ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 2.2, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill()
-        ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fillStyle = '#080808'; ctx.fill()
-        ctx.strokeStyle = n.color; ctx.lineWidth = 1.3; ctx.stroke()
-        ctx.fillStyle = n.color
-        ctx.font = '600 7.5px JetBrains Mono, monospace'
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-        n.label.split('\n').forEach((line, li, arr) => {
-          ctx.fillText(line, n.x, n.y + (li - (arr.length - 1) / 2) * 11)
-        })
-        n.x += n.vx; n.y += n.vy
-        if (n.x < W * 0.53 || n.x > W - 15) n.vx *= -1
-        if (n.y < 15 || n.y > H - 15) n.vy *= -1
-        if (Math.random() > 0.025) return
-        const e = EDGES[Math.floor(Math.random() * EDGES.length)]
-        if (nodes[e[0]] && nodes[e[1]]) pulses.push({ from: e[0], to: e[1], t: 0 })
-      })
+
+      // Draw connections between nearby particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x
+          const dy = particles[i].y - particles[j].y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < 120) {
+            ctx.beginPath()
+            ctx.moveTo(particles[i].x, particles[i].y)
+            ctx.lineTo(particles[j].x, particles[j].y)
+            ctx.strokeStyle = `rgba(124, 92, 252, ${0.03 * (1 - dist / 120)})`
+            ctx.lineWidth = 0.5
+            ctx.stroke()
+          }
+        }
+      }
+
+      // Subtle radial glow
+      const glow = ctx.createRadialGradient(W * 0.5, H * 0.3, 0, W * 0.5, H * 0.3, W * 0.5)
+      glow.addColorStop(0, 'rgba(124, 92, 252, 0.04)')
+      glow.addColorStop(0.5, 'rgba(124, 92, 252, 0.01)')
+      glow.addColorStop(1, 'transparent')
+      ctx.fillStyle = glow
+      ctx.fillRect(0, 0, W, H)
+
       animId = requestAnimationFrame(draw)
     }
 
-    const timer = setTimeout(() => { running = true; resize(); draw() }, 100)
-    const ro = new ResizeObserver(() => resize())
-    ro.observe(canvas)
+    const timer = setTimeout(() => {
+      running = true
+      resize()
+      draw()
+    }, 50)
+
     window.addEventListener('resize', resize)
     return () => {
-      running = false; clearTimeout(timer); cancelAnimationFrame(animId)
-      ro.disconnect(); window.removeEventListener('resize', resize)
+      running = false
+      clearTimeout(timer)
+      cancelAnimationFrame(animId)
+      window.removeEventListener('resize', resize)
     }
   }, [])
 
-  return (
-    <section
-      id="about"
-      className="relative overflow-hidden"
-      style={{ minHeight: '100vh' }}
-    >
-      <canvas ref={canvasRef} className="absolute inset-0 z-0" style={{ width: '100%', height: '100%' }} />
-
-      <div
-        className="relative z-10 grid items-center"
-        style={{
-          gridTemplateColumns: '1fr 1fr',
-          minHeight: '100vh',
-          padding: '72px 56px 48px 56px',
-          gap: '40px',
-        }}
-      >
-        {/* LEFT */}
-        <div className="flex flex-col justify-center">
-
-          {/* Status badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full w-fit mb-6"
-            style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.22)', color: '#10B981' }}>
-            <span className="w-[7px] h-[7px] rounded-full animate-pulse"
-              style={{ background: '#10B981', boxShadow: '0 0 8px #10B981', display: 'inline-block' }} />
-            <span className="font-mono" style={{ fontSize: '11px' }}>Open to Opportunities · Lahore, Pakistan</span>
-          </div>
-
-          {/* Name */}
-          <h1 className="font-grotesk font-extrabold tracking-[-3px]"
-            style={{ fontSize: '66px', lineHeight: '0.93', color: '#F0FDF4', marginBottom: '18px' }}>
-            Tashfeen
-            <span className="block" style={{ color: '#10B981' }}>Aziz</span>
-          </h1>
-
-          {/* Tagline */}
-          <p className="font-grotesk font-semibold mb-4"
-            style={{ fontSize: '15px', color: '#888', lineHeight: '1.5', maxWidth: '420px' }}>
-            AI & Machine Learning Engineer building production-ready LLM applications, Agentic AI systems, and RAG pipelines.
-          </p>
-
-          {/* Description */}
-          <p style={{ fontSize: '13.5px', color: '#2E2E2E', lineHeight: '1.75', maxWidth: '420px', marginBottom: '28px' }}>
-            Building production-grade AI solutions using Python, FastAPI, LangGraph, LangChain, RAG, and modern LLMs.
-            Passionate about designing intelligent systems that solve real-world business problems.
-          </p>
-
-          {/* Tech chips */}
-          <div className="flex flex-wrap gap-2" style={{ marginBottom: '32px' }}>
-            {['LangGraph', 'RAG Systems', 'FastAPI', 'LLMs', 'Computer Vision'].map(s => (
-              <span key={s} className="px-3 py-1 rounded-md font-mono flex items-center gap-1"
-                style={{ fontSize: '10.5px', background: 'rgba(99,102,241,0.09)', border: '1px solid rgba(99,102,241,0.2)', color: '#818CF8' }}>
-                <span style={{ color: '#10B981', fontSize: '8px' }}>◈</span>{s}
-              </span>
-            ))}
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="flex gap-3 flex-wrap" style={{ marginBottom: '24px' }}>
-            <button
-              onClick={() => document.getElementById('chat-widget')?.scrollIntoView({ behavior: 'smooth' })}
-              className="font-grotesk font-bold rounded-xl transition-all duration-200 hover:-translate-y-0.5"
-              style={{ background: '#10B981', color: '#080808', fontSize: '13px', padding: '11px 22px', border: 'none', cursor: 'pointer' }}>
-              🤖 Ask my AI
-            </button>
-            <a href="#projects"
-              className="font-grotesk font-semibold rounded-xl transition-colors duration-200"
-              style={{ color: '#F0FDF4', border: '1px solid #222', fontSize: '13px', padding: '11px 22px', display: 'inline-block' }}>
-              View Projects
-            </a>
-            <a href="/resume.pdf" download="Tashfeen_Aziz_Resume.pdf"
-              className="font-grotesk font-semibold rounded-xl transition-colors duration-200 flex items-center gap-2"
-              style={{ color: '#10B981', border: '1px solid rgba(16,185,129,0.3)', fontSize: '13px', padding: '11px 22px', background: 'rgba(16,185,129,0.06)' }}>
-              ↓ Resume
-            </a>
-            <a href="#contact"
-              className="font-grotesk font-semibold rounded-xl transition-colors duration-200"
-              style={{ color: '#888', border: '1px solid #1A1A1A', fontSize: '13px', padding: '11px 22px', display: 'inline-block' }}>
-              Contact
-            </a>
-          </div>
-
-          {/* Social links */}
-          <div className="flex items-center gap-4">
-            <a href="https://linkedin.com/in/tashfeen-aziz" target="_blank" rel="noopener noreferrer"
-              className="font-mono transition-colors duration-200 hover:text-white"
-              style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <span style={{ color: '#10B981' }}>↗</span> LinkedIn
-            </a>
-            <span style={{ color: '#222' }}>·</span>
-            <a href="https://github.com/tashfeen786" target="_blank" rel="noopener noreferrer"
-              className="font-mono transition-colors duration-200 hover:text-white"
-              style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <span style={{ color: '#10B981' }}>↗</span> GitHub
-            </a>
-            <span style={{ color: '#222' }}>·</span>
-            <a href="mailto:tashfeen247@gmail.com"
-              className="font-mono transition-colors duration-200 hover:text-white"
-              style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <span style={{ color: '#10B981' }}>↗</span> Email
-            </a>
-          </div>
-        </div>
-
-        {/* RIGHT: Photo */}
-        <div className="flex items-center justify-center" style={{ height: '100%' }}>
-          <div className="relative" style={{ width: '100%', maxWidth: '480px', height: '580px' }}>
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ borderRadius: '16px', background: 'radial-gradient(ellipse 80% 70% at 50% 55%, rgba(16,185,129,0.08) 0%, transparent 70%)' }} />
-            <img src="/photo.png" alt="Tashfeen Aziz"
-              style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center center', display: 'block', position: 'relative', zIndex: 1 }} />
-            <div className="absolute inset-x-0 top-0 pointer-events-none"
-              style={{ height: '70px', zIndex: 2, background: 'linear-gradient(180deg, #080808 0%, transparent 100%)' }} />
-            <div className="absolute inset-x-0 bottom-0 pointer-events-none"
-              style={{ height: '60px', zIndex: 2, background: 'linear-gradient(0deg, #080808 0%, transparent 100%)' }} />
-            <div className="absolute inset-y-0 left-0 pointer-events-none"
-              style={{ width: '48px', zIndex: 2, background: 'linear-gradient(90deg, #080808 0%, transparent 100%)' }} />
-            <div className="absolute inset-y-0 right-0 pointer-events-none"
-              style={{ width: '48px', zIndex: 2, background: 'linear-gradient(270deg, #080808 0%, transparent 100%)' }} />
-
-            {/* Stat: 3+ */}
-            <div className="absolute rounded-xl"
-              style={{ zIndex: 3, left: '-24px', top: '35%', background: 'rgba(8,8,8,0.93)', border: '1px solid rgba(16,185,129,0.22)', backdropFilter: 'blur(8px)', padding: '12px 16px' }}>
-              <div className="font-grotesk font-bold leading-none" style={{ fontSize: '22px', color: '#10B981' }}>3+</div>
-              <div className="font-mono" style={{ fontSize: '10px', color: '#444', marginTop: '4px' }}>Production AI<br />Systems</div>
-            </div>
-
-            {/* Stat: 6 */}
-            <div className="absolute rounded-xl"
-              style={{ zIndex: 3, right: '-24px', top: '20%', background: 'rgba(8,8,8,0.93)', border: '1px solid rgba(16,185,129,0.22)', backdropFilter: 'blur(8px)', padding: '12px 16px' }}>
-              <div className="font-grotesk font-bold leading-none" style={{ fontSize: '22px', color: '#10B981' }}>6</div>
-              <div className="font-mono" style={{ fontSize: '10px', color: '#444', marginTop: '4px' }}>AI Systems<br />Built</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll hint */}
-      <div className="absolute flex items-center gap-2 font-mono"
-        style={{ bottom: '24px', left: '56px', zIndex: 10, fontSize: '10px', color: '#222' }}>
-        <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, #10B981, transparent)' }} />
-        scroll to explore
-      </div>
-    </section>
-  )
-}import { useEffect, useRef } from 'react'
-
-interface Node {
-  x: number; y: number; vx: number; vy: number
-  r: number; label: string; color: string
-  glow: number; glowDir: number; glowSpeed: number
-}
-interface Pulse { from: number; to: number; t: number }
-
-const NODE_LABELS = ['RAG','Tool\nCall','Memory','LLM','Output','Embed','Input','Search']
-const NODE_COLORS = ['#10B981','#6366F1','#2D3748','#10B981','#34D399','#6366F1','#10B981','#2D3748']
-const EDGES = [[0,2],[0,4],[1,2],[1,4],[2,4],[3,4],[4,5],[6,0],[6,1],[7,2]]
-const ACCENT = '#10B981'
-
-export default function Hero() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')!
-    let animId: number, W = 0, H = 0
-    let nodes: Node[] = [], pulses: Pulse[] = [], running = false
-    const rand = (a: number, b: number) => a + Math.random() * (b - a)
-
-    function initNodes() {
-      nodes = NODE_LABELS.map((label, i) => ({
-        x: rand(W * 0.55, W * 0.95), y: rand(H * 0.05, H * 0.95),
-        vx: rand(-0.13, 0.13), vy: rand(-0.13, 0.13),
-        r: rand(16, 22), label, color: NODE_COLORS[i],
-        glow: Math.random(), glowDir: Math.random() > 0.5 ? 1 : -1,
-        glowSpeed: rand(0.006, 0.012),
-      }))
-    }
-
-    function resize() {
-      const rect = canvas.getBoundingClientRect()
-      W = canvas.width = rect.width || window.innerWidth
-      H = canvas.height = rect.height || window.innerHeight
-      initNodes()
-    }
-
-    function draw() {
-      if (!running) return
-      ctx.clearRect(0, 0, W, H)
-      EDGES.forEach(([i, j]) => {
-        if (!nodes[i] || !nodes[j]) return
-        const a = nodes[i], b = nodes[j]
-        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y)
-        ctx.strokeStyle = ACCENT + '11'; ctx.lineWidth = 1; ctx.stroke()
-        const ang = Math.atan2(b.y - a.y, b.x - a.x)
-        const mx = a.x + (b.x - a.x) * 0.58, my = a.y + (b.y - a.y) * 0.58
-        ctx.beginPath()
-        ctx.moveTo(mx, my)
-        ctx.lineTo(mx - 6 * Math.cos(ang - 0.38), my - 6 * Math.sin(ang - 0.38))
-        ctx.lineTo(mx - 6 * Math.cos(ang + 0.38), my - 6 * Math.sin(ang + 0.38))
-        ctx.closePath(); ctx.fillStyle = ACCENT + '18'; ctx.fill()
-      })
-      pulses = pulses.filter(p => p.t <= 1)
-      pulses.forEach(p => {
-        p.t += 0.011
-        if (!nodes[p.from] || !nodes[p.to]) return
-        const a = nodes[p.from], b = nodes[p.to]
-        const px = a.x + (b.x - a.x) * p.t, py = a.y + (b.y - a.y) * p.t
-        const g = ctx.createRadialGradient(px, py, 0, px, py, 11)
-        g.addColorStop(0, ACCENT + 'CC'); g.addColorStop(0.5, ACCENT + '22'); g.addColorStop(1, 'transparent')
-        ctx.beginPath(); ctx.arc(px, py, 11, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill()
-        ctx.beginPath(); ctx.arc(px, py, 2, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill()
-      })
-      nodes.forEach(n => {
-        n.glow += n.glowSpeed * n.glowDir
-        if (n.glow > 1 || n.glow < 0.1) n.glowDir *= -1
-        const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 2.2)
-        g.addColorStop(0, n.color + '20'); g.addColorStop(1, 'transparent')
-        ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 2.2, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill()
-        ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fillStyle = '#080808'; ctx.fill()
-        ctx.strokeStyle = n.color; ctx.lineWidth = 1.3; ctx.stroke()
-        ctx.fillStyle = n.color
-        ctx.font = '600 7.5px JetBrains Mono, monospace'
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-        n.label.split('\n').forEach((line, li, arr) => {
-          ctx.fillText(line, n.x, n.y + (li - (arr.length - 1) / 2) * 11)
-        })
-        n.x += n.vx; n.y += n.vy
-        if (n.x < W * 0.53 || n.x > W - 15) n.vx *= -1
-        if (n.y < 15 || n.y > H - 15) n.vy *= -1
-        if (Math.random() > 0.025) return
-        const e = EDGES[Math.floor(Math.random() * EDGES.length)]
-        if (nodes[e[0]] && nodes[e[1]]) pulses.push({ from: e[0], to: e[1], t: 0 })
-      })
-      animId = requestAnimationFrame(draw)
-    }
-
-    const timer = setTimeout(() => { running = true; resize(); draw() }, 100)
-    const ro = new ResizeObserver(() => resize())
-    ro.observe(canvas)
-    window.addEventListener('resize', resize)
-    return () => {
-      running = false; clearTimeout(timer); cancelAnimationFrame(animId)
-      ro.disconnect(); window.removeEventListener('resize', resize)
-    }
-  }, [])
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id)
+    if (el) el.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
     <section
-      id="about"
+      id="hero"
       className="relative overflow-hidden"
       style={{ minHeight: '100vh' }}
     >
-      <canvas ref={canvasRef} className="absolute inset-0 z-0" style={{ width: '100%', height: '100%' }} />
+      {/* Background canvas */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{ width: '100%', height: '100%' }}
+        aria-hidden="true"
+      />
 
+      {/* Gradient overlays */}
       <div
-        className="relative z-10 grid items-center"
+        className="absolute inset-0 z-[1] pointer-events-none"
         style={{
-          gridTemplateColumns: '1fr 1fr',
-          minHeight: '100vh',
-          padding: '88px 56px 48px 56px',
-          gap: '40px',
+          background: 'radial-gradient(ellipse 60% 50% at 50% 40%, rgba(124,92,252,0.06) 0%, transparent 70%)',
         }}
+      />
+
+      {/* Content */}
+      <div
+        className="relative z-10 max-w-6xl mx-auto px-6 flex flex-col justify-center"
+        style={{ minHeight: '100vh', paddingTop: '96px', paddingBottom: '48px' }}
       >
-        {/* LEFT */}
-        <div className="flex flex-col justify-center">
+        <div className="max-w-2xl">
 
           {/* Status badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full w-fit mb-6"
-            style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.22)', color: '#10B981' }}>
-            <span className="w-[7px] h-[7px] rounded-full animate-pulse"
-              style={{ background: '#10B981', boxShadow: '0 0 8px #10B981', display: 'inline-block' }} />
-            <span className="font-mono" style={{ fontSize: '11px' }}>Open to Opportunities · Lahore, Pakistan</span>
+          <div
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full w-fit mb-8 animate-fade-in"
+            style={{
+              background: 'rgba(124,92,252,0.06)',
+              border: '1px solid rgba(124,92,252,0.2)',
+            }}
+          >
+            <span
+              className="w-[7px] h-[7px] rounded-full animate-pulse-slow"
+              style={{
+                background: '#7c5cfc',
+                boxShadow: '0 0 8px rgba(124,92,252,0.6)',
+                display: 'inline-block',
+              }}
+            />
+            <span className="font-mono text-accent text-[11px]">
+              Open to Opportunities
+            </span>
           </div>
 
           {/* Name */}
-          <h1 className="font-grotesk font-extrabold tracking-[-3px]"
-            style={{ fontSize: '66px', lineHeight: '0.93', color: '#F0FDF4', marginBottom: '18px' }}>
-            Tashfeen
-            <span className="block" style={{ color: '#10B981' }}>Aziz</span>
+          <h1
+            className="font-grotesk font-bold tracking-[-2px] animate-slide-up"
+            style={{
+              fontSize: 'clamp(40px, 6vw, 68px)',
+              lineHeight: '1.05',
+              color: '#f0f0f5',
+              marginBottom: '16px',
+            }}
+          >
+            Tashfeen Aziz
           </h1>
 
+          {/* Title */}
+          <p
+            className="font-grotesk font-semibold text-accent mb-5 animate-slide-up"
+            style={{ fontSize: 'clamp(16px, 2.2vw, 20px)', animationDelay: '100ms', opacity: 0 }}
+          >
+            AI/ML Engineer
+          </p>
+
           {/* Tagline */}
-          <p className="font-grotesk font-semibold mb-4"
-            style={{ fontSize: '15px', color: '#888', lineHeight: '1.5', maxWidth: '420px' }}>
-            AI & Machine Learning Engineer building production-ready LLM applications, Agentic AI systems, and RAG pipelines.
+          <p
+            className="text-text-secondary leading-relaxed mb-8 animate-slide-up"
+            style={{
+              fontSize: 'clamp(15px, 1.6vw, 17px)',
+              maxWidth: '520px',
+              animationDelay: '200ms',
+              opacity: 0,
+            }}
+          >
+            Building intelligent systems with Generative AI, LLMs, RAG & AI Agents.
+            Focused on practical AI applications using Python backend technologies.
           </p>
-
-          {/* Description */}
-          <p style={{ fontSize: '13.5px', color: '#2E2E2E', lineHeight: '1.75', maxWidth: '420px', marginBottom: '28px' }}>
-            Building production-grade AI solutions using Python, FastAPI, LangGraph, LangChain, RAG, and modern LLMs.
-            Passionate about designing intelligent systems that solve real-world business problems.
-          </p>
-
-          {/* Tech chips */}
-          <div className="flex flex-wrap gap-2" style={{ marginBottom: '32px' }}>
-            {['LangGraph', 'RAG Systems', 'FastAPI', 'LLMs', 'Computer Vision'].map(s => (
-              <span key={s} className="px-3 py-1 rounded-md font-mono flex items-center gap-1"
-                style={{ fontSize: '10.5px', background: 'rgba(99,102,241,0.09)', border: '1px solid rgba(99,102,241,0.2)', color: '#818CF8' }}>
-                <span style={{ color: '#10B981', fontSize: '8px' }}>◈</span>{s}
-              </span>
-            ))}
-          </div>
 
           {/* CTA Buttons */}
-          <div className="flex gap-3 flex-wrap" style={{ marginBottom: '24px' }}>
+          <div
+            className="flex flex-wrap gap-3 mb-10 animate-slide-up"
+            style={{ animationDelay: '300ms', opacity: 0 }}
+          >
             <button
-              onClick={() => document.getElementById('chat-widget')?.scrollIntoView({ behavior: 'smooth' })}
-              className="font-grotesk font-bold rounded-xl transition-all duration-200 hover:-translate-y-0.5"
-              style={{ background: '#10B981', color: '#080808', fontSize: '13px', padding: '11px 22px', border: 'none', cursor: 'pointer' }}>
-              🤖 Ask my AI
+              onClick={() => scrollTo('projects')}
+              className="font-grotesk font-semibold rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+              style={{
+                background: '#7c5cfc',
+                color: '#fff',
+                fontSize: '14px',
+                padding: '12px 28px',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 16px rgba(124,92,252,0.25)',
+              }}
+            >
+              View My Work
             </button>
-            <a href="#projects"
-              className="font-grotesk font-semibold rounded-xl transition-colors duration-200"
-              style={{ color: '#F0FDF4', border: '1px solid #222', fontSize: '13px', padding: '11px 22px', display: 'inline-block' }}>
-              View Projects
-            </a>
-            <a href="/resume.pdf" download="Tashfeen_Aziz_Resume.pdf"
-              className="font-grotesk font-semibold rounded-xl transition-colors duration-200 flex items-center gap-2"
-              style={{ color: '#10B981', border: '1px solid rgba(16,185,129,0.3)', fontSize: '13px', padding: '11px 22px', background: 'rgba(16,185,129,0.06)' }}>
-              ↓ Resume
-            </a>
-            <a href="#contact"
-              className="font-grotesk font-semibold rounded-xl transition-colors duration-200"
-              style={{ color: '#888', border: '1px solid #1A1A1A', fontSize: '13px', padding: '11px 22px', display: 'inline-block' }}>
-              Contact
-            </a>
+            <button
+              onClick={() => scrollTo('contact')}
+              className="font-grotesk font-semibold rounded-xl transition-all duration-200 hover:-translate-y-0.5"
+              style={{
+                color: '#f0f0f5',
+                border: '1px solid #2a2a3e',
+                fontSize: '14px',
+                padding: '12px 28px',
+                background: 'rgba(255,255,255,0.02)',
+                cursor: 'pointer',
+              }}
+            >
+              Let's Connect
+            </button>
           </div>
 
           {/* Social links */}
-          <div className="flex items-center gap-4">
-            <a href="https://linkedin.com/in/tashfeen-aziz" target="_blank" rel="noopener noreferrer"
-              className="font-mono transition-colors duration-200 hover:text-white"
-              style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <span style={{ color: '#10B981' }}>↗</span> LinkedIn
+          <div
+            className="flex items-center gap-5 animate-slide-up"
+            style={{ animationDelay: '400ms', opacity: 0 }}
+          >
+            <a
+              href="https://github.com/tashfeen786"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-muted hover:text-accent transition-colors duration-200 text-sm"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              GitHub
             </a>
-            <span style={{ color: '#222' }}>·</span>
-            <a href="https://github.com/tashfeen786" target="_blank" rel="noopener noreferrer"
-              className="font-mono transition-colors duration-200 hover:text-white"
-              style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <span style={{ color: '#10B981' }}>↗</span> GitHub
+            <a
+              href="https://linkedin.com/in/tashfeen-aziz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-muted hover:text-accent transition-colors duration-200 text-sm"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              LinkedIn
             </a>
-            <span style={{ color: '#222' }}>·</span>
-            <a href="mailto:tashfeen247@gmail.com"
-              className="font-mono transition-colors duration-200 hover:text-white"
-              style={{ fontSize: '11px', color: '#444', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <span style={{ color: '#10B981' }}>↗</span> Email
+            <a
+              href="mailto:tashfeen247@gmail.com"
+              className="flex items-center gap-2 text-muted hover:text-accent transition-colors duration-200 text-sm"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              Email
             </a>
-          </div>
-        </div>
-
-        {/* RIGHT: Photo */}
-        <div className="flex items-center justify-center" style={{ height: '100%' }}>
-          <div className="relative" style={{ width: '100%', maxWidth: '480px', height: '580px' }}>
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ borderRadius: '16px', background: 'radial-gradient(ellipse 80% 70% at 50% 55%, rgba(16,185,129,0.08) 0%, transparent 70%)' }} />
-            <img src="/photo.png" alt="Tashfeen Aziz"
-              style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center center', display: 'block', position: 'relative', zIndex: 1 }} />
-            <div className="absolute inset-x-0 top-0 pointer-events-none"
-              style={{ height: '70px', zIndex: 2, background: 'linear-gradient(180deg, #080808 0%, transparent 100%)' }} />
-            <div className="absolute inset-x-0 bottom-0 pointer-events-none"
-              style={{ height: '60px', zIndex: 2, background: 'linear-gradient(0deg, #080808 0%, transparent 100%)' }} />
-            <div className="absolute inset-y-0 left-0 pointer-events-none"
-              style={{ width: '48px', zIndex: 2, background: 'linear-gradient(90deg, #080808 0%, transparent 100%)' }} />
-            <div className="absolute inset-y-0 right-0 pointer-events-none"
-              style={{ width: '48px', zIndex: 2, background: 'linear-gradient(270deg, #080808 0%, transparent 100%)' }} />
-
-            {/* Stat: 3+ */}
-            <div className="absolute rounded-xl"
-              style={{ zIndex: 3, left: '-24px', top: '35%', background: 'rgba(8,8,8,0.93)', border: '1px solid rgba(16,185,129,0.22)', backdropFilter: 'blur(8px)', padding: '12px 16px' }}>
-              <div className="font-grotesk font-bold leading-none" style={{ fontSize: '22px', color: '#10B981' }}>3+</div>
-              <div className="font-mono" style={{ fontSize: '10px', color: '#444', marginTop: '4px' }}>Production AI<br />Systems</div>
-            </div>
-
-            {/* Stat: 6 */}
-            <div className="absolute rounded-xl"
-              style={{ zIndex: 3, right: '-24px', top: '20%', background: 'rgba(8,8,8,0.93)', border: '1px solid rgba(16,185,129,0.22)', backdropFilter: 'blur(8px)', padding: '12px 16px' }}>
-              <div className="font-grotesk font-bold leading-none" style={{ fontSize: '22px', color: '#10B981' }}>6</div>
-              <div className="font-mono" style={{ fontSize: '10px', color: '#444', marginTop: '4px' }}>AI Systems<br />Built</div>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* Scroll hint */}
-      <div className="absolute flex items-center gap-2 font-mono"
-        style={{ bottom: '24px', left: '56px', zIndex: 10, fontSize: '10px', color: '#222' }}>
-        <div style={{ width: '32px', height: '1px', background: 'linear-gradient(90deg, #10B981, transparent)' }} />
-        scroll to explore
+      {/* Scroll indicator */}
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+        style={{ opacity: 0.3 }}
+      >
+        <div
+          className="w-5 h-8 rounded-full border border-border flex items-start justify-center p-1"
+        >
+          <div
+            className="w-1 h-2 rounded-full bg-accent animate-bounce"
+            style={{ animationDuration: '1.5s' }}
+          />
+        </div>
       </div>
     </section>
   )
