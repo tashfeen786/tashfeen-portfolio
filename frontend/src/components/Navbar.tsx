@@ -1,30 +1,34 @@
 import { useState, useEffect } from 'react'
 
-const links = ['About', 'Experience', 'Projects', 'Skills', 'Contact']
+const links = ['Home', 'Projects', 'Experience', 'Skills', 'About', 'Contact']
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState('')
+  const [activeSection, setActiveSection] = useState('home')
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20)
 
-      const sections = ['about', 'experience', 'projects', 'skills', 'contact']
-      for (const id of [...sections].reverse()) {
+      // The exact order of sections on the page
+      const sections = ['home', 'capabilities', 'projects', 'experience', 'skills', 'about', 'education', 'contact']
+      
+      let current = 'home'
+      for (const id of sections) {
         const el = document.getElementById(id)
         if (el) {
           const rect = el.getBoundingClientRect()
-          if (rect.top <= 120) {
-            setActiveSection(id)
-            break
+          // 150px accounts for the sticky navbar height + a small buffer
+          if (rect.top <= 150) {
+            current = id
           }
         }
       }
+      setActiveSection(current)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
+    onScroll() // Initialize on mount
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 

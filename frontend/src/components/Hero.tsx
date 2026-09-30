@@ -132,7 +132,7 @@ export default function Hero() {
 
   return (
     <section
-      id="hero"
+      id="home"
       className="relative overflow-hidden"
       style={{ minHeight: '100vh' }}
     >
